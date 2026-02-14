@@ -6,7 +6,11 @@
 function Git(name) {
     this.name = name; 
     this.lastCommitId = -1; 
-    this.HEAD = null;
+    this.branches = [];
+
+    var master = new Branch("master", null);
+    this.branches.push(master);
+    this.HEAD = master;
 }
 
 function Commit(id, parent, message) {
@@ -15,15 +19,23 @@ function Commit(id, parent, message) {
     this.message = message; 
 }
 
+function Branch(name, commit) {
+    this.name = name; 
+    this.commit = commit;
+}
+
+
+
 Git.prototype.commit = function (message) {
-    var commit = new Commit(++this.lastCommitId, this.HEAD, message);
-    this.HEAD = commit;
+    var commit = new Commit(++this.lastCommitId, this.HEAD.commit, message);
+
+    this.HEAD.commit = commit;
     return commit;
 }
 
 Git.prototype.log = function () {
     var history = [];
-    var current = this.HEAD;
+    var current = this.HEAD.commit;
 
     while (current) {
         history.push(current);
@@ -33,16 +45,48 @@ Git.prototype.log = function () {
     return history;
 }
 
+Git.prototype.checkout = function (branchName) {
+
+    for (var i = this.branches.length; i--;) {
+        if (this.branches[i].name === branchName) {
+            console.log("Switched to existing branch: " + branchName);
+            this.HEAD = this.branches[i];
+            return;
+        }
+    }
+
+    var newBranch = new Branch(branchName, this.HEAD.commit);
+    this.branches.push(newBranch);
+    this.HEAD = newBranch;
+    console.log("Switched to new branch: " + branchName);
+    return this; 
+}
+
 
 // window.Git = Git;
 
 // Examples and Tests
-console.log("Git.log() test");
+console.log("3. Branches test");
 var repo = new Git("test");
 repo.commit("Initial commit");
 repo.commit("Change 1");
 
-var log = repo.log();
-console.assert(log.length === 2); // Check if log has 2 commits
-console.assert(!!log[0] && log[0].id === 1); // Commit 1 should be first
-console.assert(!!log[1] && log[1].id === 0); // And then Commit 0. 
+function historyToIDMapper(history) {
+    var ids = history.map(function (commit) {
+        return commit.id;
+    });
+    return ids.join("-");
+}
+
+console.assert(historyToIDMapper(repo.log()) === "1-0"); // Check if commit history is correct
+
+repo.checkout("testing");
+repo.commit("change 3");
+
+console.assert(historyToIDMapper(repo.log()) === "2-1-0"); // Check if commit history on testing branch is correct
+
+repo.checkout("master");
+console.assert(historyToIDMapper(repo.log()) === "1-0"); // Check if commit history on master branch is correct
+
+repo.commit("Change 3");
+console.assert(historyToIDMapper(repo.log()) === "3-1-0"); // Check if commit history on master branch is correct after new commit
