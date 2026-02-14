@@ -6,20 +6,35 @@
 function Git(name) {
     this.name = name; 
     this.lastCommitId = -1; 
+    this.HEAD = null;
 }
 
-function Commit(id, message) {
+function Commit(id, parent, message) {
     this.id = id;
+    this.parent = parent;
     this.message = message; 
 }
 
 Git.prototype.commit = function (message) {
-    var commit = new Commit(++this.lastCommitId, message);
+    var commit = new Commit(++this.lastCommitId, this.HEAD, message);
+    this.HEAD = commit;
     return commit;
 }
 
+Git.prototype.log = function () {
+    var history = [];
+    var current = this.HEAD;
 
-window.Git = Git;
+    while (current) {
+        history.push(current);
+        current = current.parent;
+    }
+
+    return history;
+}
+
+
+// window.Git = Git;
 
 // Examples and Tests
 console.log("Git.log() test");
