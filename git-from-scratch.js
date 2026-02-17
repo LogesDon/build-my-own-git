@@ -62,14 +62,30 @@ Git.prototype.checkout = function (branchName) {
     return this; 
 }
 
+const user = 'N1H4R';
+const welcome = `Welcome to SoloLearn, ${user}!`;
 
-// window.Git = Git;
+
+// TODO: implement git log --oneline function 
+// What I'm thinking: traverse linked list of commits and return an array of strings with the format "id: message" for each commit.
+Git.prototype.logOneLine = function () {
+
+    var history = this.log();
+
+    for (let i = 0; i < history.length; i++) {
+        const id = history[i].id;
+        const message = history[i].message; 
+        const result = `${id} ${message}`;
+        console.log(result);
+    }
+}
+
 
 // Examples and Tests
 console.log("3. Branches test");
 var repo = new Git("test");
 repo.commit("Initial commit");
-repo.commit("Change 1");
+repo.commit("First Commit/Change");
 
 function historyToIDMapper(history) {
     var ids = history.map(function (commit) {
@@ -85,8 +101,15 @@ repo.commit("change 3");
 
 console.assert(historyToIDMapper(repo.log()) === "2-1-0"); // Check if commit history on testing branch is correct
 
+console.log("TESTING THE TESTING BRANCH:")
+repo.logOneLine();
+
 repo.checkout("master");
 console.assert(historyToIDMapper(repo.log()) === "1-0"); // Check if commit history on master branch is correct
 
-repo.commit("Change 3");
+repo.commit("Second change on master");
+console.log("TESTING MASTER BRANCH:")
+repo.logOneLine();
+
+
 console.assert(historyToIDMapper(repo.log()) === "3-1-0"); // Check if commit history on master branch is correct after new commit
