@@ -66,8 +66,6 @@ const user = 'N1H4R';
 const welcome = `Welcome to SoloLearn, ${user}!`;
 
 
-// TODO: implement git log --oneline function 
-// What I'm thinking: traverse linked list of commits and return an array of strings with the format "id: message" for each commit.
 Git.prototype.logOneLine = function () {
 
     var history = this.log();
@@ -78,6 +76,45 @@ Git.prototype.logOneLine = function () {
         const result = `${id} ${message}`;
         console.log(result);
     }
+}
+
+// TODO: Write function that returns git status.
+/**
+ * - print out where branch is with on branch branchName
+ * - list branches, put asterisk next to current branch
+ * - List latest commit with format: "id message"
+ * - Would have to iterate through this.branches, track which one this.HEAD
+ *   is pointing to. Remember: Head -> branch -> commit -> parent commit
+ * - 
+ */
+/**
+ * Example Output: 
+    On branch master
+
+    Branches:
+    * master
+    testing
+
+    Latest commit:
+    3 Change 3
+ */
+Git.prototype.status = function () {
+
+    const branches = this.branches;
+    console.log(`On branch ${this.HEAD.branchName}\n\n`);
+
+    console.log('Branches:\n')
+
+    for (const branch of branches) {
+        if (branch == this.HEAD) {
+            console.log(`* ${branch.branchName}\n`);
+        } else {
+            console.log(`${branch.branchName}\n`);
+        }
+    }
+
+    console.log('Latest commit:\n');
+    console.log(`${this.HEAD.commit.id} ${this.HEAD.commit.message}\n`);
 }
 
 
