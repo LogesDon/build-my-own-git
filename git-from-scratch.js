@@ -62,9 +62,6 @@ Git.prototype.checkout = function (branchName) {
     return this; 
 }
 
-const user = 'N1H4R';
-const welcome = `Welcome to SoloLearn, ${user}!`;
-
 
 Git.prototype.logOneLine = function () {
 
@@ -85,7 +82,7 @@ Git.prototype.status = function () {
     console.log('Branches:')
 
     for (const branch of branches) {
-        if (branch == this.HEAD) {
+        if (branch === this.HEAD) {
             console.log(`* ${branch.name}`);
         } else {
             console.log(`${branch.name}`);
@@ -98,8 +95,20 @@ Git.prototype.status = function () {
 
 // TODO: Write function for deleting a branch in git, which removes it from 
 //       the git branches array
-Git.prototype.branchDelete(branch) = function () {
+/**
+ * Do not delete the current head
+ * remove branch from this.branches
+ * leave commits untouched
+ */
+Git.prototype.branchDelete(branchName) = function () {
     // WRITE CODE HERE
+    let index = 0;
+    for (const branch of this.branches) {
+        if (branch.name === branchName && branch !== this.HEAD) {
+            this.branches.splice(index, 1);
+        }
+        index++;
+    }
 }
 
 
