@@ -2,6 +2,9 @@
 // Written by Logan Donnelly
 // Date Written: 10/02/2026
 
+////////////////////////////////////////////////////////////////////////////////
+//  Tutorial Features
+////////////////////////////////////////////////////////////////////////////////
 
 function Git(name) {
     this.name = name; 
@@ -62,6 +65,9 @@ Git.prototype.checkout = function (branchName) {
     return this; 
 }
 
+////////////////////////////////////////////////////////////////////////////////
+//  Features I added myself (no vibe coding)
+////////////////////////////////////////////////////////////////////////////////
 
 Git.prototype.logOneLine = function () {
 
@@ -93,15 +99,7 @@ Git.prototype.status = function () {
     console.log(`${this.HEAD.commit.id} ${this.HEAD.commit.message}\n`);
 }
 
-// TODO: Write function for deleting a branch in git, which removes it from 
-//       the git branches array
-/**
- * Do not delete the current head
- * remove branch from this.branches
- * leave commits untouched
- */
-Git.prototype.branchDelete(branchName) = function () {
-    // WRITE CODE HERE
+Git.prototype.branchDelete = function (branchName) {
     let index = 0;
     for (const branch of this.branches) {
         if (branch.name === branchName && branch !== this.HEAD) {
@@ -111,8 +109,10 @@ Git.prototype.branchDelete(branchName) = function () {
     }
 }
 
+////////////////////////////////////////////////////////////////////////////////
+//  Tests -- console.log and console.assert statements
+////////////////////////////////////////////////////////////////////////////////
 
-// Examples and Tests
 console.log("3. Branches test");
 var repo = new Git("test");
 repo.commit("Initial commit");
@@ -126,21 +126,27 @@ function historyToIDMapper(history) {
 }
 
 console.assert(historyToIDMapper(repo.log()) === "1-0"); // Check if commit history is correct
+console.log("ASSERTION 1 PASSED");
 
 repo.checkout("testing");
 repo.commit("change 3");
 
 console.assert(historyToIDMapper(repo.log()) === "2-1-0"); // Check if commit history on testing branch is correct
+console.log("ASSERTION 2 PASSED");
 
 console.log("TESTING THE TESTING BRANCH:")
 repo.status();
 
+
 repo.checkout("master");
 console.assert(historyToIDMapper(repo.log()) === "1-0"); // Check if commit history on master branch is correct
+console.log("ASSERTION 3 PASSED");
 
 repo.commit("Second change on master");
 console.log("TESTING MASTER BRANCH:")
+repo.branchDelete("testing");
 repo.status();
 
 
 console.assert(historyToIDMapper(repo.log()) === "3-1-0"); // Check if commit history on master branch is correct after new commit
+console.log("ASSERTION 4 PASSED");
