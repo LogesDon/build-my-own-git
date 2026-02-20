@@ -78,26 +78,6 @@ Git.prototype.logOneLine = function () {
     }
 }
 
-// TODO: Write function that returns git status.
-/**
- * - print out where branch is with on branch branchName
- * - list branches, put asterisk next to current branch
- * - List latest commit with format: "id message"
- * - Would have to iterate through this.branches, track which one this.HEAD
- *   is pointing to. Remember: Head -> branch -> commit -> parent commit
- * - 
- */
-/**
- * Example Output: 
-    On branch master
-
-    Branches:
-    * master
-    testing
-
-    Latest commit:
-    3 Change 3
- */
 Git.prototype.status = function () {
     const branches = this.branches;
     console.log(`On branch ${this.HEAD.name}\n`);
