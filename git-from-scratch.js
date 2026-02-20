@@ -99,21 +99,20 @@ Git.prototype.logOneLine = function () {
     3 Change 3
  */
 Git.prototype.status = function () {
-
     const branches = this.branches;
-    console.log(`On branch ${this.HEAD.branchName}\n\n`);
+    console.log(`On branch ${this.HEAD.name}\n`);
 
-    console.log('Branches:\n')
+    console.log('Branches:')
 
     for (const branch of branches) {
         if (branch == this.HEAD) {
-            console.log(`* ${branch.branchName}\n`);
+            console.log(`* ${branch.name}`);
         } else {
-            console.log(`${branch.branchName}\n`);
+            console.log(`${branch.name}`);
         }
     }
 
-    console.log('Latest commit:\n');
+    console.log('\nLatest commit:');
     console.log(`${this.HEAD.commit.id} ${this.HEAD.commit.message}\n`);
 }
 
@@ -139,14 +138,14 @@ repo.commit("change 3");
 console.assert(historyToIDMapper(repo.log()) === "2-1-0"); // Check if commit history on testing branch is correct
 
 console.log("TESTING THE TESTING BRANCH:")
-repo.logOneLine();
+repo.status();
 
 repo.checkout("master");
 console.assert(historyToIDMapper(repo.log()) === "1-0"); // Check if commit history on master branch is correct
 
 repo.commit("Second change on master");
 console.log("TESTING MASTER BRANCH:")
-repo.logOneLine();
+repo.status();
 
 
 console.assert(historyToIDMapper(repo.log()) === "3-1-0"); // Check if commit history on master branch is correct after new commit
