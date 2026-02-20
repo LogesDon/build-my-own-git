@@ -96,6 +96,12 @@ Git.prototype.status = function () {
     console.log(`${this.HEAD.commit.id} ${this.HEAD.commit.message}\n`);
 }
 
+// TODO: Write function for deleting a branch in git, which removes it from 
+//       the git branches array
+Git.prototype.branchDelete(branch) = function () {
+    // WRITE CODE HERE
+}
+
 
 // Examples and Tests
 console.log("3. Branches test");
